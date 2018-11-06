@@ -6,21 +6,25 @@ fun calculateAndPrintMinPath() {
     // Convert file into a list of lists of integers for further processing
     var triangleList = readAndCovertFile(validateInputAndReturnFileName())
 
+    // Calculate min path and save to list
     var minPathList = ArrayList<Int>()
     calculateMinPathRecursively(minPathList, triangleList)
 
-    println("Minimal path is: ${minPathList.displaySumAsString()} = ${minPathList.sum()}")
+    // Print min path calculating reverse display sum with condition that current element would not be the last
+    var reveresedDisplaySum = minPathList.displaySumAsString { minPathList.indexOf(it) != minPathList.size - 1}.reversed()
+    println("Minimal path is: ${reveresedDisplaySum} = ${minPathList.sum()}")
 
 }
 
 /**
- * Extended Arraylist function to display sum of each element individually using '+' operator after each element
+ * Extended high order function inside ArrayList to display sum of each element individually using '+' operator after element if
+ * condition is satisfied
  */
-fun <T> ArrayList<T>.displaySumAsString(): String {
+fun <T> ArrayList<T>.displaySumAsString(condition: (T) -> Boolean): String {
     var sb = StringBuilder()
     this.forEach {
         sb.append(it)
-        if (this.indexOf(it) != this.size - 1) sb.append(" + ")
+        if (condition(it)) sb.append(" + ")
     }
 
     return sb.toString()
