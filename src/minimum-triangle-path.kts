@@ -31,22 +31,23 @@ fun <T> ArrayList<T>.displaySumAsString(condition: (T) -> Boolean): String {
 }
 
 /**
- * Recursive methods that calculates minimu path of a triangle represented as list of lists, staring from the bottom.
- *
+ * Recursive method that calculates minimum path of a triangle represented as list of lists, starting from the bottom.
  * Reads last row and finds minimum, then for every pair of adjacent nodes of the min re-calculates recursively.
  *
  */
 fun calculateMinPathRecursively(minPathList: ArrayList<Int>, triagleList: List<List<Int>>, adjacentNodes: Pair<Int, Int>? = null) {
+    // Reads last row if at the beginning, else the child adjacent nodes (bottom -> top)
     val currentRow = (if (adjacentNodes == null) triagleList.lastOrNull()
     else triagleList.lastOrNull()?.subList(adjacentNodes.first, adjacentNodes.second + 1)) ?: return
 
+    // Calculates minimum node and adds to path
     val min = currentRow.min()
     val minIndex = currentRow.indexOf(min)
-
     if (min != null) {
         minPathList.add(min)
     }
 
+    // Recursively invokes itsself cutting down last row of the triangle passing child adjacent nodes
     calculateMinPathRecursively(minPathList, triagleList.subList(0, triagleList.size - 1), if (minIndex > 0) Pair(minIndex - 1, minIndex) else Pair(0, 0))
 }
 
@@ -60,7 +61,7 @@ fun readAndCovertFile(fileName: String): List<List<Int>> {
     return try {
         File(fileName).useLines { it.toList() }.map { it.split(" ").map { it.toInt() }.toList() }
     } catch (e: NumberFormatException) {
-        throw IllegalArgumentException("Non numeric characters are allowed inside triangle.")
+        throw IllegalArgumentException("Only numeric characters are allowed inside triangle.")
     }
 }
 
